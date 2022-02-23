@@ -39,9 +39,9 @@ namespace ExportWebAPIs.Controllers
             var client = GetConfigData();
 
             //Read Json 
-            var data = ReadJsonData();
+            var customerObj = ReadJsonData();
 
-            foreach (var item in data.Values)
+            foreach (var item in customerObj.Values)
             {
                 await CreateBuyer(client, item);
                 await CreateBuyerUser(client, item);
@@ -57,26 +57,26 @@ namespace ExportWebAPIs.Controllers
 
             myJsonResponse = myJsonResponse.Replace("$", ""); //Replacing $ sign
 
-            CustomerModel data = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomerModel>(myJsonResponse);
-            return data;
+            CustomerModel customerObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomerModel>(myJsonResponse);
+            return customerObj;
         }
 
-        private async Task CreateBuyer(IOrderCloudClient client, _Values data)
+        private async Task CreateBuyer(IOrderCloudClient client, _Values customerObj)
         {
             var buyer = new Buyer
             {
 
-                Name = data.FirstName, //config
-                DateCreated = data.DateCreated,
+                Name = customerObj.FirstName, //config
+                DateCreated = customerObj.DateCreated,
                 Active = true,
-                ID = data.Id,
+                ID = customerObj.Id,
                 DefaultCatalogID = "0001",   //Env specified Default Catalog ID
                 xp = new ExtendedBuyer
                 {
-                    UniqueId = data.UniqueId,
-                    Version = data.Version,
-                    Published = data.Published,
-                    IsPersisted = data.IsPersisted,
+                    UniqueId = customerObj.UniqueId,
+                    Version = customerObj.Version,
+                    Published = customerObj.Published,
+                    IsPersisted = customerObj.IsPersisted,
                 }
 
             };
@@ -93,24 +93,24 @@ namespace ExportWebAPIs.Controllers
 
         }
 
-        private async Task CreateBuyerUser(IOrderCloudClient client, _Values data)
+        private async Task CreateBuyerUser(IOrderCloudClient client, _Values customerObj)
         {
             var user = new User
             {
-                ID = data.Id,
-                FirstName = data.FirstName,
-                LastName = data.LastName,
-                Email = data.Email,
+                ID = customerObj.Id,
+                FirstName = customerObj.FirstName,
+                LastName = customerObj.LastName,
+                Email = customerObj.Email,
                 Password = "Customer@123",
-                Username = data.UserName,
+                Username = customerObj.UserName,
                 Active = true,
                 xp = new ExtendedBuyerUser
                 {
-                    AccountNumber = data.AccountNumber,
-                    AccountStatus = data.AccountStatus,
-                    CreatedBy = data.CreatedBy,
-                    UpdatedBy = data.UpdatedBy,
-                    UpdatedDate = data.DateUpdated
+                    AccountNumber = customerObj.AccountNumber,
+                    AccountStatus = customerObj.AccountStatus,
+                    CreatedBy = customerObj.CreatedBy,
+                    UpdatedBy = customerObj.UpdatedBy,
+                    UpdatedDate = customerObj.DateUpdated
                 }
             };
 
@@ -126,9 +126,9 @@ namespace ExportWebAPIs.Controllers
 
         }
 
-        private async Task CeateBuyerUserAddress(IOrderCloudClient client, _Values data)
+        private async Task CeateBuyerUserAddress(IOrderCloudClient client, _Values customerObj)
         {
-            var address = data.Components.Values[2].Party;
+            var address = customerObj.Components.Values[2].Party;
             var item = new Address
             {
                 FirstName = address.FirstName,
@@ -154,7 +154,7 @@ namespace ExportWebAPIs.Controllers
             try
             {
                 Address response = await _command.CreateBuyerAddress("0001", item, client);
-                await CreateBuyerAddressAssignment(client, data, response);
+                await CreateBuyerAddressAssignment(client, customerObj, response);
             }
 
             catch (OrderCloudException ex)
@@ -164,13 +164,13 @@ namespace ExportWebAPIs.Controllers
            
         }
         
-        private async Task CreateBuyerAddressAssignment(IOrderCloudClient client, _Values data, Address response)
+        private async Task CreateBuyerAddressAssignment(IOrderCloudClient client, _Values customerObj, Address response)
         {
             var addressAssignment = new AddressAssignment
             {
                 IsBilling = true,
                 IsShipping = true,
-                UserID = data.Id,
+                UserID = customerObj.Id,
                 AddressID = response.ID,
             };
 

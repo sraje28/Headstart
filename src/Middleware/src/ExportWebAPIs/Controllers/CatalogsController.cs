@@ -28,9 +28,9 @@ namespace ExportWebAPIs.Controllers
             var client = GetConfigData();
 
             //Read Json 
-            var data = ReadJsonData();
+            var catalogsObj = ReadJsonData();
 
-            foreach (var item in data.Values)
+            foreach (var item in catalogsObj.Values)
             {
                 await CreateCatalog(client, item);
                                 
@@ -45,32 +45,32 @@ namespace ExportWebAPIs.Controllers
 
             myJsonResponse = myJsonResponse.Replace("$", ""); //Replacing $ sign
 
-            CatalogsModel data = Newtonsoft.Json.JsonConvert.DeserializeObject<CatalogsModel>(myJsonResponse);
-            return data;
+            CatalogsModel catalogsObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CatalogsModel>(myJsonResponse);
+            return catalogsObj;
         }
 
-        private async Task CreateCatalog(IOrderCloudClient client, Values data)
+        private async Task CreateCatalog(IOrderCloudClient client, Values catalogsObj)
         {
-            var workflow = data.Components.Values[2].Workflow;
+            var workflow = catalogsObj.Components.Values[2].Workflow;
             var catalog = new Catalog
             {
                 //ID = data.Id,
                 OwnerID = "MPOrderCloud",
-                Name = data.Name,
+                Name = catalogsObj.Name,
                 Active = true,
-                Description = data.Type,
+                Description = catalogsObj.Type,
                 xp = new ExtendedCatalog
                 {
                     WorkflowName = workflow.Name,
                     WorkflowEntityTarget = workflow.EntityTarget,
                     EntityTargetUniqueId = workflow.EntityTargetUniqueId,
-                    FriendlyId = data.FriendlyId,
-                    SitecoreId = data.SitecoreId,
-                    PriceBookName = data.PriceBookName,
-                    PromotionBookName = data.PromotionBookName,
-                    DefaultInventorySetName = data.DefaultInventorySetName,
-                    IsPublished = data.Published,
-                    ChildrenCategoryList = data.ChildrenCategoryList
+                    FriendlyId = catalogsObj.FriendlyId,
+                    SitecoreId = catalogsObj.SitecoreId,
+                    PriceBookName = catalogsObj.PriceBookName,
+                    PromotionBookName = catalogsObj.PromotionBookName,
+                    DefaultInventorySetName = catalogsObj.DefaultInventorySetName,
+                    IsPublished = catalogsObj.Published,
+                    ChildrenCategoryList = catalogsObj.ChildrenCategoryList
                     
                 }
             };
@@ -106,23 +106,23 @@ namespace ExportWebAPIs.Controllers
             }
         }
 
-        private async Task ProductCatalogAssignment(IOrderCloudClient client, Catalog response, Product products)
-        {
-                var productcatalogAssignment = new ProductCatalogAssignment
-                {
-                    CatalogID = response.ID,
-                    ProductID = products.ID
-                };
-            try
-            {
-                await _command.ProductCatalogAssignment(productcatalogAssignment, client);
-            }
+        //private async Task ProductCatalogAssignment(IOrderCloudClient client, Catalog response, Product products)
+        //{
+        //        var productcatalogAssignment = new ProductCatalogAssignment
+        //        {
+        //            CatalogID = response.ID,
+        //            ProductID = products.ID
+        //        };
+        //    try
+        //    {
+        //        await _command.ProductCatalogAssignment(productcatalogAssignment, client);
+        //    }
 
-            catch (OrderCloudException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
+        //    catch (OrderCloudException ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //}
 
 
         public IOrderCloudClient GetConfigData()
