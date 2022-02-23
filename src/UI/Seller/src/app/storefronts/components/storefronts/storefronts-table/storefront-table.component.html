@@ -1,0 +1,25 @@
+<resource-table-component
+  [resourceList]="resourceList"
+  [selectedResourceID]="selectedResourceID"
+  [updatedResource]="updatedResource"
+  [resourceInSelection]="resourceInSelection"
+  [ocService]="ocService"
+  [dataIsSaving]="dataIsSaving"
+  [resourceForm]="resourceForm"
+  (searched)="searchResources($event)"
+  [shouldShowCreateNew]="true"
+  (hitScrollEnd)="handleScrollEnd()"
+  (changesSaved)="saveUpdates()"
+  (changesDiscarded)="discardChanges()"
+  (resourceDelete)="deleteResource()"
+  (resourceSelected)="selectResource($event)"
+  [labelSingular]="'Storefront'"
+  [labelPlural]="'Storefronts'"
+>
+  <app-storefront-edit
+    class="resource-edit"
+    [resourceInSelection]="updatedResource"
+    (updateResource)="updateResource($event)"
+  >
+  </app-storefront-edit>
+</resource-table-component>

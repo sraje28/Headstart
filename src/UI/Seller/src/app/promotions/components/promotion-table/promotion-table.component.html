@@ -1,0 +1,25 @@
+<resource-table-component
+  [resourceList]="resourceList"
+  [selectedResourceID]="selectedResourceID"
+  [updatedResource]="updatedResource"
+  [resourceInSelection]="resourceInSelection"
+  [shouldShowResourceActions]="false"
+  [ocService]="ocService"
+  [filterConfig]="filterConfig"
+  [dataIsSaving]="dataIsSaving"
+  [resourceForm]="resourceForm"
+  (searched)="searchResources($event)"
+  (hitScrollEnd)="handleScrollEnd()"
+  (changesSaved)="saveUpdates()"
+  (changesDiscarded)="discardChanges()"
+  (resourceDelete)="deleteResource()"
+  (resourceSelected)="selectResource($event)"
+  [labelSingular]="'ADMIN.NAV.PROMOTION'"
+  [labelPlural]="'ADMIN.NAV.PROMOTIONS'"
+>
+  <div class="resource-edit">
+    <app-promotion-edit
+      [resourceInSelection]="resourceInSelection"
+    ></app-promotion-edit>
+  </div>
+</resource-table-component>

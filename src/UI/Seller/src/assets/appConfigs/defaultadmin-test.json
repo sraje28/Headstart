@@ -1,0 +1,11 @@
+{
+  "hostedApp": true,
+  "sellerID": "my-seller-id",
+  "sellerName": "Default Admin",
+  "appname": "Default Admin",
+  "clientID": "1071C835-B154-4690-828F-03432A41308E",
+  "middlewareUrl": "https://my-hosted-middleware.com",
+  "translateBlobUrl": "http://127.0.0.1:10000/devstoreaccount1/ngx-translate/i18n/",
+  "blobStorageUrl": "http://127.0.0.1:10000/devstoreaccount1",
+  "orderCloudApiUrl": "https://sandboxapi.ordercloud.io"
+}

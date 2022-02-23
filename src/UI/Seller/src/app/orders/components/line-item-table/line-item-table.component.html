@@ -1,0 +1,142 @@
+<div *ngIf="_liGroupedByShipFrom?.length > 0 && !createShipment">
+  <div
+    class="card border shadow-sm mb-4"
+    *ngFor="let liGroup of _liGroupedByShipFrom; let shipFromIndex = index"
+  >
+    <div class="card-header py-2 px-3">
+      <div class="row">
+        <div class="col">
+          <small class="font-weight-bolder text-uppercase text-muted"
+            >Ship From</small
+          >
+          <h5 class="card-title mb-0">
+            {{
+              liGroup[0]?.ShipFromAddress?.CompanyName ||
+                liGroup[0]?.Product?.xp?.Facets?.supplier[0]
+            }}
+            <small
+              *ngIf="liGroup[0]?.ShipFromAddress"
+              class="text-muted d-block"
+            >
+              <span
+                >{{ liGroup[0].ShipFromAddress?.Street1
+                }}<span *ngIf="liGroup[0].ShipFromAddress?.Street2"
+                  >, {{ liGroup[0].ShipFromAddress.Street2 }}</span
+                >, {{ liGroup[0].ShipFromAddress?.City }},
+                {{ liGroup[0].ShipFromAddress?.State }}
+                {{ liGroup[0].ShipFromAddress?.Zip }}</span
+              >
+            </small>
+          </h5>
+        </div>
+        <div class="col text-right">
+          <small class="font-weight-bolder text-uppercase text-muted"
+            >Ship Method</small
+          >
+          <h5 class="card-title mb-0">{{ getShipMethodString(liGroup[0]) }}</h5>
+        </div>
+      </div>
+      <ng-content></ng-content>
+    </div>
+    <div class="table-responsive">
+      <table
+        class="table table-sm table-bordered table-hover display-table mb-0"
+      >
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Comments</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let li of liGroup; let lineItemIndex = index">
+            <td
+              class="
+                align-middle
+                d-flex
+                justify-content-start
+                align-items-center
+              "
+            >
+              <img
+                [id]="i"
+                [src]="li.xp?.ImageUrl || getImageUrl(li.ID)"
+                width="auto"
+                height="80px"
+                class="mr-2"
+              />
+              <h6>{{ li.ID }}</h6>
+            </td>
+            <td class="align-middle">
+              <div class="d-flex align-items-center">
+                <h6>
+                  <span>{{ li | productNameWithSpecs }} </span>
+                  <small class="text-muted d-block">{{
+                    li.Variant?.ID || li.Product.ID
+                  }}</small>
+                  <a
+                    *ngIf="li.Product.xp.ArtworkRequired"
+                    href="{{ li.xp.PrintArtworkURL }}"
+                    target="_blank"
+                    >Download PDF</a
+                  >
+                  <p
+                    class="mb-0 mt-2"
+                    *ngFor="let spec of getVariableTextSpecs(li)"
+                  >
+                    {{ spec?.Name }}: {{ spec.Value }}
+                  </p>
+                </h6>
+              </div>
+            </td>
+            <td class="align-middle text-center">
+              {{ li.Quantity }}
+            </td>
+            <td>{{ li.xp.SupplierComments }}</td>
+            <td class="align-middle">
+              {{ getLineItemStatusDisplay(li) }}
+              <div *ngIf="li.xp.Returns?.length || li.xp.Cancelations?.length">
+                <!-- Possible TO-DO: If a line item would have multiple returns/cancellations on it, a UI to support a better return view may be needed. -->
+                <div class="d-flex flex-column">
+                  <small *ngIf="li.xp.Returns[0]?.Reason"
+                    >Return Reason:
+                    {{
+                      getReturnOrCancelReason(li.xp.Returns[0].Reason)
+                    }}</small
+                  >
+                  <small *ngIf="li.xp.Returns[0]?.Comment"
+                    >Comment: {{ li.xp.Returns[0].Comment }}</small
+                  >
+                  <small *ngIf="li.xp.Cancelations[0]?.Reason"
+                    >Cancel Reason:
+                    {{
+                      getReturnOrCancelReason(li.xp.Cancelations[0].Reason)
+                    }}</small
+                  >
+                  <small *ngIf="li.xp.Cancelations[0]?.Comment"
+                    >Comment: {{ li.xp.Cancelations[0].Comment }}</small
+                  >
+                </div>
+              </div>
+              <return-form
+                *ngIf="
+                  li.xp.LineItemStatus === 'ReturnRequested' && isSellerUser
+                "
+                [order]="_order"
+                (lineItemUpdate)="handleLineItemUpdate()"
+                [lineItem]="li"
+              ></return-form>
+            </td>
+            <td class="align-middle">
+              {{ li.LineTotal | currency: _order?.xp?.currency }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

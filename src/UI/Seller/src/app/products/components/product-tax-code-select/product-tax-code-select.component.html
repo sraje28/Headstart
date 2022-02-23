@@ -1,0 +1,54 @@
+<div class="card bg-white shadow-sm p-4 mt-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <h6 class="font-weight-medium">Tax Categorization <span class="required-field">*</span></h6>
+    <fa-icon
+      [hidden]="productForm.controls['ProductType'].value === 'Quote'"
+      class="tab-status-icon text-danger"
+      [icon]="faAsterisk"
+      *ngIf="isCreatingNew && !taxSelectionsValid()"
+    >
+    </fa-icon>
+    <fa-icon
+      [hidden]="productForm.controls['ProductType'].value === 'Quote'"
+      class="text-success"
+      [icon]="faCheckCircle"
+      *ngIf="isCreatingNew && taxSelectionsValid()"
+    >
+    </fa-icon>
+  </div>
+  <form [formGroup]="productForm">
+    <div class="form-row">
+      <div class="form-group col-6">
+        <product-tax-code-select-dropdown
+          [readonly]="readonly"
+          class="btn-block resource-btn mr-1 mb-1"
+          [taxCodes]="taxCodes"
+          [productForm]="productForm"
+          [superHSProductEditable]="superHSProductEditable"
+          [isRequired]="isRequired"
+          [isCreatingNew]="isCreatingNew"
+          (taxCodesSearched)="onTaxCodesSearched($event)"
+          (onSelectTaxCode)="handleSelectTaxCode($event)"
+        >
+        </product-tax-code-select-dropdown>
+      </div>
+    </div>
+    <hr />
+    <h6 class="font-weight-medium">Resale Status</h6>
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input
+          [attr.disabled]="readonly ? true : null"
+          type="checkbox"
+          class="custom-control-input"
+          formControlName="IsResale"
+          (input)="handleIsResaleInput($event.target.checked)"
+          id="IsResale"
+        />
+        <label class="custom-control-label" for="IsResale" translate
+          >ADMIN.PRODUCT_EDIT.RESALE</label
+        >
+      </div>
+    </div>
+  </form>
+</div>

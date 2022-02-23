@@ -1,0 +1,35 @@
+@import "../../../../styles/main.scss";
+
+.breadcrumb {
+    background: transparent;
+    margin-bottom: 0;
+    font-weight: 500;
+    font-size: 0.9rem;
+    .breadcrumb-item {
+      display: flex;
+      align-items: center;
+      &:first-child {
+        &::before {
+          display: none;
+        }
+      }
+      &::before {
+        height: 1ch;
+        content: '';
+        -webkit-mask: url(../../../../assets/svg/angle-right.svg) no-repeat left center;
+        mask: url(../../../../assets/svg/angle-right.svg) no-repeat left center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        background-color: $light;
+        margin: .15rem .65rem 0 .5rem;
+      }
+      .breadcrumb-link {
+        color: $light;
+      }
+      &:last-child {
+        .breadcrumb-link {
+          color: $primary-light;
+        }
+      }
+    }
+  }

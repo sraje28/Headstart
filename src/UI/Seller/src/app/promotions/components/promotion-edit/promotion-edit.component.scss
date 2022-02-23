@@ -1,0 +1,22 @@
+.resource-btn {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #616469;
+}
+
+.product-search-area {
+    max-height: 175px;
+    width: auto;
+}
+
+.dropdown-inline {
+    position: relative !important;
+    top: unset !important;
+    left: unset !important;
+    will-change: unset !important;
+    transform: unset !important;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+}

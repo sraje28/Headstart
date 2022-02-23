@@ -1,0 +1,26 @@
+/*  Please try to use default Bootstrap whenever possible. 
+    If you need custom styles, add global styles to the components directory:
+    1) Create your partial: `_my-component.scss`
+    2) Add your partial to the rest of the components in `main.scss`
+    Use `_shame.scss` sparingly and follow the commenting structure outlined at the top of the file   */
+
+// Third party libraries
+@import 'oc-theme/oc-bootstrap-variables';
+@import 'vendor/bootstrap';
+
+// bs4 alert styled design (uses bs4 variables)
+@import '~ngx-toastr/toastr-bs4-alert';
+
+// Base styles
+@import 'base/base';
+@import 'base/custom-utilities';
+
+// Components in this app
+@import 'components/buttons';
+@import 'components/chip';
+@import 'components/form-control';
+@import 'components/hover-select';
+@import 'components/modal';
+
+// Shameful styles go here
+@import 'shame'

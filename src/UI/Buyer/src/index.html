@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <base href="/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet"
+    crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" crossorigin="anonymous" />
+  <!-- client-theme-placeholder -->
+</head>
+
+<body class="mat-typography">
+  <app-root></app-root>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.0.3/custom-elements-es5-adapter.js"></script>
+</body>
+
+</html>
+
+<script>
+  var prefix = '<PLACEHOLDER>'
+  if (document.location.pathname.split('/')[1] === prefix) {
+    const scriptItemsToReplace = ['runtime', 'polyfills', 'styles', 'main']
+    const linkItemsToReplace = ['defaultbuyer']
+    var scripts = document.getElementsByTagName('script')
+    var links = document.getElementsByTagName('link')
+    for (item of scripts) {
+      var scriptSrc = item.getAttribute('src')
+      if (
+        scriptSrc &&
+        !scriptSrc.includes(prefix) &&
+        scriptItemsToReplace.find((i) => scriptSrc.includes(i))
+      ) {
+        var newScript = document.createElement('script')
+        newScript.setAttribute('src', prefix + '/' + scriptSrc)
+        document.body.appendChild(newScript)
+      }
+    }
+    for (item of links) {
+      var linkHref = item.getAttribute('href')
+      if (
+        linkHref &&
+        !linkHref.includes(prefix) &&
+        linkItemsToReplace.find((i) => linkHref.includes(i))
+      ) {
+        var newLink = document.createElement('link')
+        newLink.setAttribute('href', prefix + '/' + linkHref)
+        newLink.setAttribute('rel', 'stylesheet')
+        document.head.appendChild(newLink)
+      }
+    }
+  }
+</script>

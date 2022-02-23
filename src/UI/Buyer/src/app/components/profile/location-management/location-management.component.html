@@ -1,0 +1,45 @@
+<section class="container mt-3">
+  <div class="row">
+    <ocm-profile-nav class="col-md-3"> </ocm-profile-nav>
+    <div class="col-md-9">
+      <div>
+        <h1 class="page-heading mt-0" translate>
+          PROFILE.LOCATION_DETAILS.TITLE
+        </h1>
+        <h3
+          class="border-bottom pb-3 mb-3 d-flex justify-content-between border-bottom pb-2 mb-4"
+        >
+          <span>
+            <span *ngIf="address?.CompanyName">
+              {{ address?.CompanyName }}
+            </span>
+            <span *ngIf="address?.CompanyName && address?.AddressName">
+              |
+            </span>
+            <span *ngIf="address?.AddressName">
+              {{ address?.AddressName }}
+            </span>
+          </span>
+          <button
+            *ngIf="userCanViewLocationOrders"
+            type="button"
+            (click)="toLocationOrders()"
+            class="btn btn-outline-primary"
+          >
+            Orders Made in This Location
+          </button>
+        </h3>
+      </div>
+      <ocm-order-access-management
+        *ngIf="_locationID && userCanAdminPermissions"
+        [locationID]="_locationID"
+      >
+      </ocm-order-access-management>
+      <ocm-location-permissions-management
+        *ngIf="_locationID && userCanAdminPermissions"
+        [locationID]="_locationID"
+      >
+      </ocm-location-permissions-management>
+    </div>
+  </div>
+</section>
