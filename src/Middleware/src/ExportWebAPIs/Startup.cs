@@ -28,9 +28,6 @@ namespace ExportWebAPIs
         {
             services.AddControllers();
             services.AddScoped<IImportBuyersCommand, ImportBuyersCommand>();
-            services.AddScoped<IImportCatalogsCommand, ImportCatalogsCommand>();
-            services.AddScoped<IImportCategoriesCommand, ImportCategoriesCommand>();
-            services.AddScoped<IImportProductsCommand, ImportProductsCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
