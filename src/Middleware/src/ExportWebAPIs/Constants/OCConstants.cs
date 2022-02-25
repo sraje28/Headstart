@@ -10,8 +10,5 @@ namespace ExportWebAPIs.Constants
         public const string ApiUrl = "ApiUrl";
         public const string AuthUrl = "AuthUrl";
         public const string JsonFilePath = "JsonFilePath";
-        public const string CatalogJsonPath = "CatalogJsonPath";
-        public const string CategoryJsonPath = "CategoryJsonPath";
-        public const string ProductJsonPath = "ProductJsonPath";
     }
 }
