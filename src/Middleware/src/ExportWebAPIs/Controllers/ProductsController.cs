@@ -57,12 +57,12 @@ namespace ExportWebAPIs.Controllers
                 ID = productsObj.Id,
                 OwnerID = "MPOrderCloud",
                 Active = true,
-                //Inventory =
-                //{
-                //    Enabled = true,
-                //    OrderCanExceed = false
-                    
-                //},
+                Inventory = new Inventory
+                {
+                    Enabled = true,
+                    OrderCanExceed = false
+
+                },
                 xp = new ProductsExtendedProperty
                 {
                     DisplayName = productsObj.DisplayName,
@@ -80,6 +80,7 @@ namespace ExportWebAPIs.Controllers
             try
             {
                 Product response = await _command.CreateProduct(product, client);
+
                 await ProductAssignment(client, response);
             }
 

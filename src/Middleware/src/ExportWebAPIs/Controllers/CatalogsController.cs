@@ -33,7 +33,7 @@ namespace ExportWebAPIs.Controllers
             foreach (var item in catalogsObj.Values)
             {
                 await CreateCatalog(client, item);
-                                
+                
             }
 
         }
@@ -78,6 +78,7 @@ namespace ExportWebAPIs.Controllers
             {
                 Catalog response = await _command.CreateCatalog(catalog, client);
                 await CreateCatalogAssignment(client, response);
+                await ProductCatalogAssignment(client, response);
             }
 
             catch (OrderCloudException ex)
@@ -106,23 +107,23 @@ namespace ExportWebAPIs.Controllers
             }
         }
 
-        //private async Task ProductCatalogAssignment(IOrderCloudClient client, Catalog response, Product products)
-        //{
-        //        var productcatalogAssignment = new ProductCatalogAssignment
-        //        {
-        //            CatalogID = response.ID,
-        //            ProductID = products.ID
-        //        };
-        //    try
-        //    {
-        //        await _command.ProductCatalogAssignment(productcatalogAssignment, client);
-        //    }
+        private async Task ProductCatalogAssignment(IOrderCloudClient client, Catalog response)
+        {
+            var productcatalogAssignment = new ProductCatalogAssignment
+            {
+                CatalogID = response.ID,
+                ProductID = "Entity-SellableItem-6042274"
+            };
+            try
+            {
+                await _command.ProductCatalogAssignment(productcatalogAssignment, client);
+            }
 
-        //    catch (OrderCloudException ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //}
+            catch (OrderCloudException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
 
         public IOrderCloudClient GetConfigData()

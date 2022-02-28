@@ -24,7 +24,7 @@ namespace ExportWebAPIs.Controllers
         private readonly ILogger<CustomerController> _logger;
         private readonly IImportBuyersCommand _command;
         private readonly IConfiguration _config;
-
+        
 
         public CustomerController(ILogger<CustomerController> logger, IImportBuyersCommand command, IConfiguration config)
         {
@@ -32,7 +32,7 @@ namespace ExportWebAPIs.Controllers
             _command = command;
             _config = config;
         }
-
+        
         [HttpGet]
         public async Task Buyer()
         {
@@ -43,11 +43,11 @@ namespace ExportWebAPIs.Controllers
 
             foreach (var item in customerObj.Values)
             {
+                /* call async method */
                 await CreateBuyer(client, item);
                 await CreateBuyerUser(client, item);
                 await CeateBuyerUserAddress(client, item);
             }
-
         }
 
         public CustomerModel ReadJsonData()
@@ -70,7 +70,7 @@ namespace ExportWebAPIs.Controllers
                 DateCreated = customerObj.DateCreated,
                 Active = true,
                 ID = customerObj.Id,
-                DefaultCatalogID = "0001",   //Env specified Default Catalog ID
+                DefaultCatalogID = "Entity-Catalog-Habitat_Master",   //Env specified Default Catalog ID
                 xp = new ExtendedBuyer
                 {
                     UniqueId = customerObj.UniqueId,
@@ -83,7 +83,7 @@ namespace ExportWebAPIs.Controllers
 
             try
             {
-                Buyer response = await _command.CreateBuyer(buyer, client); 
+                Buyer response = await _command.CreateBuyer(buyer, client);            
             }
 
             catch (OrderCloudException ex)
@@ -95,7 +95,10 @@ namespace ExportWebAPIs.Controllers
 
         private async Task CreateBuyerUser(IOrderCloudClient client, _Values customerObj)
         {
-            var user = new User
+            var maxConcurency = 5;
+            var minPause = 100; // ms
+            List<User> UserList = new List<User>();
+            UserList.Add(new User
             {
                 ID = customerObj.Id,
                 FirstName = customerObj.FirstName,
@@ -112,11 +115,12 @@ namespace ExportWebAPIs.Controllers
                     UpdatedBy = customerObj.UpdatedBy,
                     UpdatedDate = customerObj.DateUpdated
                 }
-            };
+            });
 
             try
             {
-               User res = await _command.CreateBuyerUser("0001", user, client);
+                // await _command.CreateBuyerUser("CustomBuyer001", user, client);
+                await ExportWebAPIs.Throttler.Throttler.RunAsync(UserList, minPause, maxConcurency, user => _command.CreateBuyerUser("0001", user, client));
             }
 
             catch (OrderCloudException ex)
