@@ -13,5 +13,6 @@ namespace ExportWebAPIs.Constants
         public const string CatalogJsonPath = "CatalogJsonPath";
         public const string CategoryJsonPath = "CategoryJsonPath";
         public const string ProductJsonPath = "ProductJsonPath";
+        public const string BuyerJsonPath = "BuyerJsonPath";
     }
 }

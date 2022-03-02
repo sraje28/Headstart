@@ -3,11 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Headstart.Common;
+
 namespace ExportWebAPIs.Command
 {
+   
 
     public interface IImportBuyersCommand
     {
+       
         Task<Buyer> CreateBuyer(Buyer buyer, IOrderCloudClient client);
         Task<User> CreateBuyerUser(string buyerID, User user, IOrderCloudClient client);
         Task<Address> CreateBuyerAddress(string buyerID, Address address, IOrderCloudClient client);
@@ -16,6 +20,7 @@ namespace ExportWebAPIs.Command
     }
     public class ImportBuyersCommand : IImportBuyersCommand
     {
+
         public async Task<Buyer> CreateBuyer(Buyer buyer, IOrderCloudClient client)
         {
             return await client.Buyers.CreateAsync(buyer);
@@ -33,5 +38,7 @@ namespace ExportWebAPIs.Command
         {
             await client.Addresses.SaveAssignmentAsync(buyerID, addressAssignment);
         }
+
+
     }
 }

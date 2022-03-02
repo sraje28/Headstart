@@ -15,6 +15,7 @@ using System.IO;
 using System.Text.Json;
 using ExportWebAPIs.Constants;
 
+
 namespace ExportWebAPIs.Controllers
 {
     [ApiController]
@@ -32,7 +33,8 @@ namespace ExportWebAPIs.Controllers
             _command = command;
             _config = config;
         }
-        
+
+
         [HttpGet]
         public async Task Buyer()
         {
@@ -40,14 +42,26 @@ namespace ExportWebAPIs.Controllers
 
             //Read Json 
             var customerObj = ReadJsonData();
+            var buyerObj = BuyerJsonData();
 
+            foreach (var data in buyerObj.Values)
+            {
+                 await CreateBuyer(client, data);
+            }
             foreach (var item in customerObj.Values)
             {
-                /* call async method */
-                await CreateBuyer(client, item);
                 await CreateBuyerUser(client, item);
                 await CeateBuyerUserAddress(client, item);
             }
+        }
+
+
+        public BuyerModel BuyerJsonData()
+        {
+            string fileName = _config.GetValue<string>(OCConstants.BuyerJsonPath);
+            string myJsonResponse = System.IO.File.ReadAllText(fileName);
+            BuyerModel buyerObj = Newtonsoft.Json.JsonConvert.DeserializeObject<BuyerModel>(myJsonResponse);
+            return buyerObj;
         }
 
         public CustomerModel ReadJsonData()
@@ -61,29 +75,31 @@ namespace ExportWebAPIs.Controllers
             return customerObj;
         }
 
-        private async Task CreateBuyer(IOrderCloudClient client, _Values customerObj)
+       
+
+        private async Task CreateBuyer(IOrderCloudClient client, BuyerValues buyerObj )
         {
             var buyer = new Buyer
             {
 
-                Name = customerObj.FirstName, //config
-                DateCreated = customerObj.DateCreated,
+                Name = buyerObj.Name, //config
+                DateCreated = DateTime.Now,
                 Active = true,
-                ID = customerObj.Id,
-                DefaultCatalogID = "Entity-Catalog-Habitat_Master",   //Env specified Default Catalog ID
-                xp = new ExtendedBuyer
-                {
-                    UniqueId = customerObj.UniqueId,
-                    Version = customerObj.Version,
-                    Published = customerObj.Published,
-                    IsPersisted = customerObj.IsPersisted,
-                }
+                ID = buyerObj.Id,
+                DefaultCatalogID = "0001",   //Env specified Default Catalog ID
+                //xp = new ExtendedBuyer
+                //{
+                //    UniqueId = customerObj.UniqueId,
+                //    Version = customerObj.Version,
+                //    Published = customerObj.Published,
+                //    IsPersisted = customerObj.IsPersisted,
+                //}
 
             };
 
             try
             {
-                Buyer response = await _command.CreateBuyer(buyer, client);            
+                Buyer response = await _command.CreateBuyer(buyer, client);
             }
 
             catch (OrderCloudException ex)
@@ -120,7 +136,7 @@ namespace ExportWebAPIs.Controllers
             try
             {
                 // await _command.CreateBuyerUser("CustomBuyer001", user, client);
-                await ExportWebAPIs.Throttler.Throttler.RunAsync(UserList, minPause, maxConcurency, user => _command.CreateBuyerUser("0001", user, client));
+                await ExportWebAPIs.Throttler.Throttler.RunAsync(UserList, minPause, maxConcurency, user => _command.CreateBuyerUser("Default-Habitat-Buyer-001", user, client));
             }
 
             catch (OrderCloudException ex)
@@ -157,7 +173,7 @@ namespace ExportWebAPIs.Controllers
 
             try
             {
-                Address response = await _command.CreateBuyerAddress("0001", item, client);
+                Address response = await _command.CreateBuyerAddress("Default-Habitat-Buyer-001", item, client);
                 await CreateBuyerAddressAssignment(client, customerObj, response);
             }
 
@@ -180,7 +196,7 @@ namespace ExportWebAPIs.Controllers
 
             try
             {
-                await _command.CreateBuyerAddressAssignment("0001", addressAssignment, client);
+                await _command.CreateBuyerAddressAssignment("Default-Habitat-Buyer-001", addressAssignment, client);
             }
 
             catch (OrderCloudException ex)

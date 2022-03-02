@@ -7,10 +7,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { of } from 'rxjs'
 
 import { LoginComponent } from '@app-seller/auth/containers/login/login.component'
-import {
-  applicationConfiguration,
-  AppConfig,
-} from '@app-seller/config/app.config'
+import { applicationConfiguration, AppConfig } from '@app-seller/config/app.config'
 
 import { CookieModule } from 'ngx-cookie'
 import { ToastrService } from 'ngx-toastr'

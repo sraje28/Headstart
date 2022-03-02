@@ -29,5 +29,6 @@ namespace ExportWebAPIs.Command
         {
             await client.Catalogs.SaveProductAssignmentAsync(productCatalogAssignment);
         }
+
     }
 }

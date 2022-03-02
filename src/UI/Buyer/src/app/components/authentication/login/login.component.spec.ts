@@ -1,14 +1,13 @@
-import { CurrentUserService } from './../../../shared/services/current-user/current-user.service';
+
+import { CurrentUserService } from 'src/app/services/current-user/current-user.service';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InjectionToken, DebugElement } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { of, BehaviorSubject } from 'rxjs';
-
-import { LoginComponent } from '@app-seller/auth/containers/login/login.component';
+import { LoginComponent } from '@app-seller/auth/containers/login/LoginComponent'
 import { applicationConfiguration, AppConfig } from '@app-seller/config/app.config';
-
 import { CookieModule } from 'ngx-cookie';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';

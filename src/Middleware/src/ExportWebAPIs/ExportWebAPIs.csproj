@@ -11,4 +11,9 @@
     <PackageReference Include="OrderCloud.SDK" Version="0.10.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Headstart.API\Headstart.API.csproj" />
+    <ProjectReference Include="..\Headstart.Common\Headstart.Common.csproj" />
+  </ItemGroup>
+
 </Project>

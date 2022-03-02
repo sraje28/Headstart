@@ -52,13 +52,13 @@ namespace ExportWebAPIs.Controllers
         private async Task CreateCatalog(IOrderCloudClient client, Values catalogsObj)
         {
             var workflow = catalogsObj.Components.Values[2].Workflow;
+
             var catalog = new Catalog
             {
-                //ID = data.Id,
-                OwnerID = "MPOrderCloud",
+                ID = catalogsObj.Id,
                 Name = catalogsObj.Name,
                 Active = true,
-                Description = catalogsObj.Type,
+                //Description = catalogsObj.Type,
                 xp = new ExtendedCatalog
                 {
                     WorkflowName = workflow.Name,
@@ -107,12 +107,12 @@ namespace ExportWebAPIs.Controllers
             }
         }
 
-        private async Task ProductCatalogAssignment(IOrderCloudClient client, Catalog response)
+        private async Task ProductCatalogAssignment(IOrderCloudClient client, Catalog response )
         {
             var productcatalogAssignment = new ProductCatalogAssignment
             {
                 CatalogID = response.ID,
-                ProductID = "Entity-SellableItem-6042274"
+                ProductID = "Entity-SellableItem-6042278"
             };
             try
             {
